@@ -1,3 +1,4 @@
+done:
 [x] implement new approach
 [x] process entire directory
 [x] write usage
@@ -5,13 +6,21 @@
 [x] move css string output to parser
 [x] specify css output file
 [x] create css output file (check if exists)
-[ ] exclude certain files
-[ ] get pytest working
-[ ] handle priority tokens
+[x] have parser to take in / output strings (for testing)
+
+features:
+[ ] exclude html files matching pattern
 [ ] link css output file to html (use pyquery?)
-[ ] fail correctly on pseudo-stuff
-[ ] refactor parser to take in / output strings (for unit testing)
+[ ] move table styling to css
+[ ] handle inline stylesheet
+[ ] recursive html file search
+[ ] generate tag#id instead of .class
+
+correctness:
+[ ] handle priority tokens properly
+[ ] "fail" correctly on pseudo-stuff
 [ ] ignore inline imports
-[ ] BIG: move table styling to css
-[ ] BIG: handle inline stylesheet
-[ ] MAYBE: implement recursive
+
+tests:
+[ ] use pytest
+[ ] move html output string joining into parser
