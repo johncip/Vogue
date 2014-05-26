@@ -1,0 +1,17 @@
+[x] implement new approach
+[x] process entire directory
+[x] write usage
+[x] parse/normalize css
+[x] move css string output to parser
+[x] specify css output file
+[x] create css output file (check if exists)
+[ ] exclude certain files
+[ ] get pytest working
+[ ] handle priority tokens
+[ ] link css output file to html (use pyquery?)
+[ ] fail correctly on pseudo-stuff
+[ ] refactor parser to take in / output strings (for unit testing)
+[ ] ignore inline imports
+[ ] BIG: move table styling to css
+[ ] BIG: handle inline stylesheet
+[ ] MAYBE: implement recursive
