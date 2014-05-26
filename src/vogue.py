@@ -31,6 +31,8 @@ class Parser(HTMLParser):
 
         HTMLParser.__init__(self)
 
+    # TODO feed_many
+
     def feed(self, data):
         """
         Empty storage for a new output file is created for each new input file.
