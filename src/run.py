@@ -7,6 +7,7 @@ Runs the parser.
 
 import argparse
 import errno
+import sys
 
 import fnmatch
 import os
@@ -23,7 +24,9 @@ def mkdirp(path):
     if not os.path.exists(path):
         os.mkdir(path)
     if not os.path.isdir(path):
-        raise OSError(errno.EEXIST, "File exists and is not a directory.")
+        msg = ("Path {path} exists but is not a directory."
+               .format(path=os.path.abspath(path)))
+        raise OSError(errno.EEXIST, msg)
     else:
         pass
 
@@ -34,11 +37,10 @@ def exit_if_exists(path, msg_prefix):
     """
     Prints an error message and quits, if the path exists.
     """
-    msg = "Error: %s %s already exists.\nTo force output, use -f."
+    msg = "Error: {prefix} {path} already exists.\nTo force output, use -f."
 
     if os.path.exists(path):
-        print msg % (msg_prefix, os.path.abspath(path))
-        exit(1)
+        sys.exit(msg.format(prefix=msg_prefix, path=os.path.abspath(path)))
 
 
 def parse_args():
@@ -76,8 +78,7 @@ def validate_args(args):
     to exit.
     """
     if not os.path.exists(args['input_dir']):
-        print "Input path not found: %s" % args['input_dir']
-        exit(1)
+        sys.exit("Error: input path not found: {path}".format(path=args['input_dir']))
 
     # output_dir and css_path can only exist if --force is used
     if not args['force']:
@@ -127,7 +128,6 @@ def write_css(parser, prefix, css_path):
 if __name__ == '__main__':
     args = parse_args()
     validate_args(args)
-
 
     fnames = fnmatch.filter(os.listdir(args['input_dir']), '*.html')
     process_files(fnames, args['input_dir'], args['output_dir'], args['prefix'], args['css_path'])

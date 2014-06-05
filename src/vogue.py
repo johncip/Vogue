@@ -40,7 +40,7 @@ class Parser(HTMLParser):
         self.out = []
         HTMLParser.feed(self, data)
 
-    def handle_starttag(self, tag, attrs):
+    def handle_starttag(self, tag, attributes):
         """
         Appends start tags to the output.
         If a style tag is present, its contents are added to the current
@@ -48,22 +48,24 @@ class Parser(HTMLParser):
         style information.
         """
         pred = lambda x: x[0] == 'style'
-
-        styles, butes = partition(attrs, pred)
-        butes = ['%s="%s"' % x for x in butes]
-        styles = [x[1] for x in styles]
+        styles, attrs = partition(attributes, pred)
+        attrs = ['%s="%s"' % (a, v) for (a, v) in attrs]
 
         if styles:
-            s = to_ast(styles[0])
+            _, value = styles[0]  # list has one 2-tuple
+            s = to_ast(value)
+
+            # create a new entry
             if s not in self.sty:
                 self.sty[s] = self.next
                 self.next += 1
-            butes.append('class="%s%s"' % (self.prefix, self.sty[s]))
+            attribute = 'class="{prefix}{num}"'.format(prefix=self.prefix,
+                                                       num=self.sty[s])
+            attrs.append(attribute)
 
-        res = '<' + tag
-        if butes:
-            res += ' '
-        res += " ".join(butes) + '>'
+
+        res = '<{tag}{attrs_str}>'.format(tag=tag, attrs_str=(' ' + ' '.join(
+            attrs) if attrs else ' '))
 
         self.out.append(res)
 
@@ -90,7 +92,8 @@ class Parser(HTMLParser):
         """
         Returns the current stylesheet as a string.
         """
-        fmt = ".%s%s { %s }\n"
         classes = sorted([(v, k) for (k, v) in self.sty.items()])
+        fmt = ".%s%s { %s }\n"
         out = (fmt % (self.prefix, cls, to_str(cset)) for cls, cset in classes)
+
         return '\n'.join(out)
