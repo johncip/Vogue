@@ -1,3 +1,5 @@
+https://gist.github.com/mazuhl/658583
+
 done:
 [x] implement new approach
 [x] process entire directory
